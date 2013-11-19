@@ -1,3 +1,11 @@
+var keypress = require("keypress");
+keypress(process.stdin);
+
+if (process.stdin.setRawMode)
+  process.stdin.setRawMode(true)
+else
+  require('tty').setRawMode(true)
+
 var port = process.env.SPHERO_DEV || process.argv[2];
 
 if(!port) {
@@ -17,6 +25,27 @@ var stage = 0;
 simple.stop();
 
 simple.on("ready", function() {
+  process.stdin.on("keypress", function(ch, key) {
+    if(key && key.name === 'up') {
+      simple.forward();
+    }
+    if(key && key.name === 'left') {
+      simple.left();
+    }
+    if(key && key.name === 'right') {
+      simple.right();
+    }
+
+    if(key && key.ctrl && key.name === 'c') {
+      process.exit(1);
+    }
+
+    usage();
+  });
+
+  usage();
+
+  return;
   var repl = require("repl").start("> ");
   ["left", "right", "forward", "stop"].forEach(function(cmd) {
     if(typeof simple[cmd] === "function")
@@ -28,3 +57,12 @@ simple.on("ready", function() {
   console.log("an error occured");
   console.log(err);
 });
+
+function usage() {
+  console.log("");
+  console.log("   simple-sphero");
+  console.log("   up - drive forward");
+  console.log("   left - turn 90° left");
+  console.log("   right - turn 90° right");
+  console.log("");
+}

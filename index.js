@@ -41,7 +41,6 @@ var controls = new train({
     function bump() {
       setTimeout(function() {
         spd = Math.round(ease[ticks++] * 255);
-        console.log("Ramping to %s", spd);
         sphero.roll(spd, heading, 2);
         if(ticks < ease.length) {
           bump();
