@@ -10,17 +10,21 @@ if(!port) {
   process.exit(1);
 }
 
-var simple = require("./index")(port, 0xff);
+var simple = require("./index")(port, 0x77);
 
 var stage = 0;
-setInterval(function() {
-  stage++;
-  switch(stage % 2) {
-    case 0:
-      return simple.forward(1);
-    case 1:
-      return simple.right();
-    case 2:
-      return simple.stop();
-  }
-}, 3000);
+
+simple.stop();
+
+simple.on("ready", function() {
+  var repl = require("repl").start("> ");
+  ["left", "right", "forward", "stop"].forEach(function(cmd) {
+    if(typeof simple[cmd] === "function")
+      repl.context[cmd] = simple[cmd].bind(simple);
+    else repl.context[cmd] = simple[cmd];
+  });
+  repl.context.simple = simple;
+}).on("error", function(err) {
+  console.log("an error occured");
+  console.log(err);
+});

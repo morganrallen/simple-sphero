@@ -1,4 +1,9 @@
+var EventEmitter = require("events").EventEmitter;
+var util = require("util");
+
 function train(functions) {
+  EventEmitter.call(this);
+
   this._queue = [];
   this._queing = false;
 
@@ -22,22 +27,22 @@ function train(functions) {
   return this;
 }
 
-train.prototype = {
-  _startQueing: function() {
-    this._queing = true;
-    return this;
-  },
+util.inherits(train, EventEmitter);
 
-  _stopQueing: function() {
-    this._queing = false;
+train.prototype._startQueing = function() {
+  this._queing = true;
+  return this;
+},
 
-    var q;
-    while(!this._queing && (q = this._queue.shift())) {
-      q[0].call(this, q[1], q[2], q[3]);
-    }
+train.prototype._stopQueing = function() {
+  this._queing = false;
 
-    return this;
+  var q;
+  while(!this._queing && (q = this._queue.shift())) {
+    q[0].call(this, q[1], q[2], q[3]);
   }
-};
+
+  return this;
+}
 
 module.exports = train;
