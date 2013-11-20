@@ -1,10 +1,11 @@
 var keypress = require("keypress");
 keypress(process.stdin);
 
-if (process.stdin.setRawMode)
-  process.stdin.setRawMode(true)
-else
-  require('tty').setRawMode(true)
+try {
+  process.stdin.setRawMode(true);
+} catch(e) {
+  console.log("Could not set stdin to raw mode, using nodemon?");
+};
 
 var port = process.env.SPHERO_DEV || process.argv[2];
 
@@ -24,20 +25,32 @@ var stage = 0;
 
 simple.stop();
 
+function randomColor() {
+  return Math.round(Math.random() * 254);
+}
+
 simple.on("ready", function() {
   process.stdin.on("keypress", function(ch, key) {
     if(key && key.name === 'up') {
       simple.forward();
     }
+    
     if(key && key.name === 'left') {
       simple.left();
     }
+    
     if(key && key.name === 'right') {
       simple.right();
     }
 
+    if(key && key.name === 'c') {
+      simple.setColor(randomColor() * randomColor() * randomColor());
+    }
+
     if(key && key.ctrl && key.name === 'c') {
-      process.exit(1);
+      process.nextTick(function() {
+        process.exit(1);
+      });
     }
 
     usage();
@@ -61,6 +74,7 @@ simple.on("ready", function() {
 function usage() {
   console.log("");
   console.log("   simple-sphero");
+  console.log("   c - change color!");
   console.log("   up - drive forward");
   console.log("   left - turn 90° left");
   console.log("   right - turn 90° right");

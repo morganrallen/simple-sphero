@@ -54,6 +54,10 @@ var controls = new train({
     return this;
   },
 
+  setColor: function(color) {
+    sphero.setRGB(color);
+  },
+
   stop: function() {
     console.log("stop");
     sphero.roll(0x00, 0, 2);
