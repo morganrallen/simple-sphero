@@ -78,6 +78,7 @@ simple.on("ready", function() {
 function usage() {
   console.log("");
   console.log("   simple-sphero");
+  console.log("   [BATTERY: " + simple.power + "]");
   console.log("   c - change color!");
   console.log("   t - toggle backlight");
   console.log("   up - drive forward");

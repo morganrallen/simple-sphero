@@ -91,7 +91,7 @@ module.exports = function(dev, s) {
 
     sphero.on("notification", function(msg) {
       // 0x06 is self leveling completed successful
-      if(msg.DATA[0] === 0x06) {
+      if(msg.ID_CODE === 0x0b && msg.DATA[0] === 0x06) {
         // reenable stablilization
         sphero.setStabalisation(0x01);
         // set rotate to slow XXX doesn't appear to work
@@ -101,11 +101,21 @@ module.exports = function(dev, s) {
         // enable back led
         controls.toggleBackLight();
 
+        // enable power notifications
+        sphero.setPowerNotification(0x01);
+
         console.log("Calibration Successful");
         // start sequencing queued commands
         controls._stopQueing();
 
         controls.emit("ready");
+      } else if(msg.ID_CODE === 0x01) {
+        switch(msg.DATA[0]) {
+          case 0x01: controls.power = "Charging";
+          case 0x02: controls.power = "OK";
+          case 0x03: controls.power = "Low";
+          case 0x04: controls.power = "Critical";
+        }
       }
     });
   });
@@ -117,6 +127,8 @@ module.exports = function(dev, s) {
   sphero.on("error", function(err) {
     controls.emit("error", err);        
   });
+
+  controls.power = "Unkown";
 
   return controls;
 };
