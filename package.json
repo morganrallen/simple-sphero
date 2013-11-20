@@ -1,6 +1,6 @@
 {
   "name": "simple-sphero",
-  "version": "0.0.4",
+  "version": "0.0.6",
   "description": "left/right/forward commands on top of spheron",
   "main": "index.js",
   "scripts": {
