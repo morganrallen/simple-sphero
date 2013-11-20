@@ -47,6 +47,10 @@ simple.on("ready", function() {
       simple.setColor(randomColor() * randomColor() * randomColor());
     }
 
+    if(key && key.name === 't') {
+      simple.toggleBackLight();
+    }
+
     if(key && key.ctrl && key.name === 'c') {
       process.nextTick(function() {
         process.exit(1);
@@ -75,6 +79,7 @@ function usage() {
   console.log("");
   console.log("   simple-sphero");
   console.log("   c - change color!");
+  console.log("   t - toggle backlight");
   console.log("   up - drive forward");
   console.log("   left - turn 90° left");
   console.log("   right - turn 90° right");

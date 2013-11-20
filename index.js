@@ -8,6 +8,8 @@ var speed = 0x77;
 
 var train = require("./train");
 
+var backlightOn = true;
+
 var controls = new train({
   left: function() {
     // setHeading alters Spheros reference heading
@@ -63,6 +65,10 @@ var controls = new train({
     sphero.roll(0x00, 0, 2);
 
     return this;
+  },
+
+  toggleBackLight: function() {
+    sphero.setBackLED((backlightOn = !backlightOn) ? 0x00 : 0xff);
   }
 });
 
@@ -93,7 +99,7 @@ module.exports = function(dev, s) {
         // errrr, forget what this is for
         sphero.setTemporaryOptionFlags(0x01);
         // enable back led
-        sphero.setBackLED(0xff);
+        controls.toggleBackLight();
 
         console.log("Calibration Successful");
         // start sequencing queued commands
