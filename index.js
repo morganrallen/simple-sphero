@@ -7,6 +7,7 @@ var rollLen = 0;
 var speed = 0x77;
 
 var train = require("./train");
+var rollDuration = 15;
 
 var backlightOn = true;
 
@@ -36,8 +37,8 @@ var controls = new train({
 
     console.log("forward %s", len);
     var ticks = 0;
-    var ease = easing(30, "sin");
-    ease = ease.concat(easing(30, "sin").reverse());
+    var ease = easing(rollDuration, "sin");
+    ease = ease.concat(easing(rollDuration, "sin").reverse());
 
     var spd;
     function bump() {
@@ -72,11 +73,12 @@ var controls = new train({
   }
 });
 
-module.exports = function(dev, s) {
+module.exports = function(dev, s, d) {
   // override default speed, you want to change this value
   // depending on your surface. Higher (0xff max) for rougher surfaces
   // lower (0x00 min) for smoother, lower friction surfaces
   s && (speed = s);
+  d && (rollDuration = d);
   // connect with spheron
   sphero.open(dev);
   // wait for open or error
