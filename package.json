@@ -1,6 +1,6 @@
 {
   "name": "simple-sphero",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "left/right/forward commands on top of spheron",
   "main": "index.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "license": "BSD-2-Clause",
   "dependencies": {
     "spheron": "0.0.1",
-    "easing": "0.0.4"
+    "easing": "0.0.4",
+    "keypress": "~0.2.1"
   }
 }
