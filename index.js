@@ -95,7 +95,7 @@ module.exports = function(dev, s, d) {
       // 0x06 is self leveling completed successful
       if(msg.ID_CODE === 0x0b && msg.DATA[0] === 0x06) {
         // reenable stablilization
-        sphero.setStabalisation(0x01);
+        //sphero.setStabalisation(0x01);
         // set rotate to slow XXX doesn't appear to work
         sphero.setRotationRate(0x00);
         // errrr, forget what this is for
